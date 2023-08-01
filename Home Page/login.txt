@@ -1,0 +1,54 @@
+def login_button():
+    # --- USER AUTHENTICATION ---
+    users = db.fetch_all_users()
+
+    usernames = [user["key"] for user in users]
+    names = [user["name"] for user in users]
+    hashed_passwords = [user["password"] for user in users]
+
+    credentials = {"usernames":{}}
+
+    for un, name, pw in zip(usernames, names, hashed_passwords):
+        user_dict = {"name":name,"password":pw}
+        credentials["usernames"].update({un:user_dict})
+
+    authenticator = stauth.Authenticate(credentials, "app_home", "auth", cookie_expiry_days=30)
+
+    name, authentication_status, username = authenticator.login("Login", "sidebar")
+
+
+    if authentication_status == False:
+        st.error("Username/password is incorrect")
+
+    if authentication_status == None:
+        st.warning("Please enter your username and password")
+
+    if authentication_status:
+        # ---- PROJECTS ----
+        with st.container():
+            st.write('Welcome')
+            st.write("---")
+            st.header("Today's Specials!!")
+            st.write("##")
+            image_column, text_column = st.columns((1, 2))
+            with image_column:
+                st.image(img_lottie_animation)
+            with text_column:
+                st.subheader("White Potato")
+                st.write("Seller : Arjun Sharma")
+                st.write("Location : Tamil Nadu")
+
+                st.markdown("[Watch Video...](https://youtu.be/TXSOitGoINE)")
+        with st.container():
+            image_column, text_column = st.columns((1, 2))
+            with image_column:
+                st.image(img_contact_form)
+            with text_column:
+                st.subheader("How To Add A Contact Form To Your Streamlit App")
+                st.write(
+                    """
+                    Want to add a contact form to your Streamlit website?
+                    In this video, I'm going to show you how to implement a contact form in your Streamlit app using the free service ‘Form Submit’.
+                    """
+                )
+                st.markdown("[Watch Video...](https://youtu.be/FOULV9Xij_8)")
